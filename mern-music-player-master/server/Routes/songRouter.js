@@ -10,8 +10,9 @@ import {
 const router = express.Router();
 const upload = multer({ storage: storage });
 
-router.post("/upload", upload.single("audio"), addNewSong);
-router.get("/songs/all", getAllSongs);
-router.get("/song/:songId", getSongById);
+router.post("/", upload.single("audio"), addNewSong);
+router.get("/", getAllSongs); // <- was "/songs/all"
+router.get("/:songId", getSongById); // <- was "/song/:songId"
+
 
 export default router;
