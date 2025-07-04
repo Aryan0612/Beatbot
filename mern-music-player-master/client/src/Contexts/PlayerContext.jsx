@@ -1,6 +1,9 @@
 import { createContext, useContext, useState, useRef, useEffect } from "react";
 import axios from "axios";
 
+// API base URL from environment
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
 const PlayerContext = createContext();
 
 export const PlayerContextProvider = ({ children }) => {
@@ -28,36 +31,40 @@ export const PlayerContextProvider = ({ children }) => {
 
   const setDefaultSong = async () => {
     const song = await getSong("63f8afc102b53113e9024778");
-    song.currTime = 0.0;
-    song.duration = 176;
-    setCurrSong(song);
+    if (song) {
+      song.currTime = 0.0;
+      song.duration = 176;
+      setCurrSong(song);
+    }
   };
 
   const getAllSongs = async () => {
     try {
-      const res = await axios.get("/songs/all");
+      const res = await axios.get(`${API_BASE}/songs/all`);
       setSongs(res.data.songs);
     } catch (err) {
-      console.log(err);
+      console.log("Error fetching songs:", err);
     }
   };
 
   const getSong = async (id) => {
     try {
-      const res = await axios.get(`/song/${id}`);
+      const res = await axios.get(`${API_BASE}/song/${id}`);
       return res.data.song;
     } catch (err) {
-      console.log(err);
+      console.log("Error fetching song:", err);
     }
   };
 
   const setSongInPlayer = async (id) => {
     setPlaying(false);
     const song = await getSong(id);
-    song.currTime = 0.0;
-    song.duration = 0.0;
-    setCurrSong(song);
-    setPlaying(true);
+    if (song) {
+      song.currTime = 0.0;
+      song.duration = 0.0;
+      setCurrSong(song);
+      setPlaying(true);
+    }
   };
 
   const togglePlaying = () => {
@@ -78,14 +85,18 @@ export const PlayerContextProvider = ({ children }) => {
     audioElem.current.currentTime = evt.target.value;
   };
 
-  const getPrevTrack = (id) => {
-    const index = songs.map((song) => song._id).indexOf(currSong._id);
-    setSongInPlayer(songs.at(index - 1)._id);
+  const getPrevTrack = () => {
+    const index = songs?.map((song) => song._id).indexOf(currSong._id);
+    if (index > 0) {
+      setSongInPlayer(songs[index - 1]._id);
+    }
   };
 
-  const getNextTrack = (id) => {
-    const index = songs.map((song) => song._id).indexOf(currSong._id);
-    setSongInPlayer(songs.at((index + 1) % songs.length)._id);
+  const getNextTrack = () => {
+    const index = songs?.map((song) => song._id).indexOf(currSong._id);
+    if (index !== -1 && songs?.length > 0) {
+      setSongInPlayer(songs[(index + 1) % songs.length]._id);
+    }
   };
 
   const changeVolume = (evt) => {
