@@ -15,7 +15,7 @@ const DB = process.env.DATABASE;
 
 set("strictQuery", false);
 
-connect(DB, {
+connect('mongodb+srv://poats69:PratikOmAryanTejas@test-database.mvt9bee.mongodb.net/?retryWrites=true&w=majority', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).then(() => console.log("DB Connection Successful"));
