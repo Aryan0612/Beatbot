@@ -12,7 +12,7 @@ if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
 
 app.use(json());
 
-app.use("/api/v1/", songRouter);
+app.use("/api/songs", songRouter);
 
 app.options("*", (req, res) => {
   res.status(200).send();
