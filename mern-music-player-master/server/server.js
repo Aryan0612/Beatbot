@@ -11,7 +11,7 @@ process.on("uncaughtException", (err) => {
 
 config();
 
-const DB = process.env.DATABASE_PASSWORD;
+const DB = process.env.DATABASE;
 
 set("strictQuery", false);
 
