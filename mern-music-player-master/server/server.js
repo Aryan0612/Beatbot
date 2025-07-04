@@ -34,14 +34,5 @@ process.on("unhandledRejection", (err) => {
     process.exit(1);
   });
 });
-const express = require('express');
-const cors = require('cors');
-const songsRoutes = require('./routes/songsRoutes'); // <- adjust path if needed
 
-const app = express();
-app.use(cors());
-app.use(express.json());
-
-// Use the songs API
-app.use('/api/songs', songsRoutes);  // <- this must match what your frontend calls
 
